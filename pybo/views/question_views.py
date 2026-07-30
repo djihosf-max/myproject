@@ -104,7 +104,7 @@ def create():
             # 출력해서 만들어진 파일 이름을 확인한다
             print("filename ====> ", filename)
 
-            ext = os.path.splitext(filename)[1]
+            ext = os.path.splitext(image_file.filename)[1]
             filename = f"{uuid.uuid4()}{ext}"
 
             file_path = os.path.join(upload_folder, filename)
