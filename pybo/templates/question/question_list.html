@@ -39,13 +39,13 @@
     </div>
 <table class="table table-striped">
         <thead>
-            <tr class="table-dark">
-                <th scope="col">번호</th>
-                <th scope="col">추천</th>
-                <th scope="col">제목</th>
-                <th scope="col">글쓴이</th>
-                <th scope="col">작성일자</th>
-            </tr>
+        <tr class="table-dark">
+            <th scope="col">번호</th>
+            <th scope="col">추천</th>  <!-- 추가 -->
+            <th scope="col">제목</th>
+            <th scope="col">글쓴이</th>
+            <th scope="col">작성일자</th>
+        </tr>
     </thead>
     <tbody>
         {% if question_list %}
@@ -56,16 +56,26 @@
             <!-- -->
             <td>{{ question.voter|length }}</td>  <!-- 추천 수-->
             <td>
-                    <a href="{{ url_for('question.detail', question_id=question.id) }}">{{ question.subject }}</a>
-                    {# 답변의 개수를 표시 #}
-                    {% if question.answer_set|length > 0 %}
-                    <span class="text-danger small ms-2">{{ question.answer_set|length }}</span>
-                    {% endif %}
-                </td>
-                <td>
-                    {{ question.user.username }}
-                </td>
-                <td>{{ question.create_date | datetime }}</td>
+                <!-- 이미지 하나 보이기 -->
+                {% if question.image_path %}
+                {# 1. 문자열을 쉼표로 나눠 리스트로 만듭니다 #}
+                {% set image_list = question.image_path.split(',') %}
+
+                {# 2. 리스트의 첫번째(0번 인덱스) 요소만 가져와서 표시한다 #}
+                <img src="{{ url_for('static', filename=image_list[0]) }}" alt="thumbnail"
+                    style="width: 50px; height: 50px; object-fit: cover;">
+                {% endif %}
+                <!-- 이미지 하나 보이기 끝 -->
+                <a href="{{ url_for('question.detail', question_id=question.id) }}">{{ question.subject }}</a>
+                {# 답변의 개수를 표시 #}
+                {% if question.answer_set|length > 0 %}
+                <span class="text-danger small ms-2">{{ question.answer_set|length }}</span>
+                {% endif %}
+            </td>
+            <td>
+                {{ question.user.username }}
+            </td>
+            <td>{{ question.create_date | datetime }}</td>
             </tr>
             {% endfor %}
             {% else %}
